@@ -9,7 +9,7 @@ class SignInManager {
   final AuthBase auth;
   final ValueNotifier<bool> isLoading;
 
-  Future<User> _signIn(Future<User> Function() signInMethod) async {
+  Future<User?> _signIn(Future<User?> Function() signInMethod) async {
     try {
       isLoading.value = true;
       return await signInMethod();
@@ -19,5 +19,6 @@ class SignInManager {
     }
   }
 
-  Future<User> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
+  Future<User?> signInWithGoogle() async =>
+      await _signIn(auth.signInWithGoogle);
 }

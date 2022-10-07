@@ -6,7 +6,7 @@ abstract class AuthBase {
   Stream<User?> authStateChanges();
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> createUserWithEmailAndPassword(String email, String password);
-  Future<User> signInWithGoogle();
+  Future<User?> signInWithGoogle();
   Future<void> signOut();
 }
 
@@ -38,19 +38,21 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<User> signInWithGoogle() async {
-    final googleSignIn = GoogleSignIn();
-    final googleUser = await googleSignIn.signIn();
+  Future<User?> signInWithGoogle() async {
+    User? user;
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
-      final googleAuth = await googleUser.authentication;
-      if (googleAuth.idToken != null) {
-        final userCredential = await _firebaseAuth
-            .signInWithCredential(GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
-          accessToken: googleAuth.accessToken,
-        ));
-        return userCredential.user!;
-      } else {
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      try {
+        UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        user = userCredential.user;
+        return user;
+      } on FirebaseAuthException catch (e) {
         throw FirebaseAuthException(
           code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
           message: 'Missing Google ID Token',
@@ -67,7 +69,7 @@ class Auth implements AuthBase {
   @override
   Future<void> signOut() async {
     final googleSignIn = GoogleSignIn();
-    await googleSignIn.disconnect();
+    await googleSignIn.signOut();
     await _firebaseAuth.signOut();
   }
 }

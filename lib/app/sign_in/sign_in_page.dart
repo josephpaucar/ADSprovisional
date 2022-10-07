@@ -65,8 +65,12 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Time Tracker'),
+        title: const Text(
+          'Aves de San Martin',
+          style: TextStyle(fontFamily: 'Pacifico'),
+        ),
         elevation: 2.0,
+        centerTitle: true,
       ),
       body: _buildContent(context),
       backgroundColor: Colors.grey[200],
@@ -95,10 +99,9 @@ class SignInPage extends StatelessWidget {
           SignInButton(
             text: 'Sign in with email',
             textColor: Colors.white,
-            color: Colors.teal,
+            color: const Color(0xFF396A1E),
             onPressed: isLoading ? null : () => _signInWithEmail(context),
           ),
-          const SizedBox(height: 8.0),
         ],
       ),
     );
@@ -114,9 +117,7 @@ class SignInPage extends StatelessWidget {
       'Sign in',
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 32.0,
-        fontWeight: FontWeight.w600,
-      ),
+          fontSize: 32.0, fontWeight: FontWeight.w600, fontFamily: 'Poppins'),
     );
   }
 }
