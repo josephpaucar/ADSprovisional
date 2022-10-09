@@ -76,9 +76,9 @@ class Event {
   final int id;
   final String nombre;
   final String imageUrl;
-  final String siteUrl;
+  final String webUrl;
 
-  Event(this.id, this.nombre, this.imageUrl, this.siteUrl);
+  Event(this.id, this.nombre, this.imageUrl, this.webUrl);
 
   static final events = [
     Event(1, 'Evento de la semana en Altomayo',
@@ -124,17 +124,19 @@ class Service {
   final int id;
   final String nombre;
   final String imageUrl;
-  final bool isPromoted;
-  final String category;
-  final String serviceUrl;
+  final bool esDestacado;
+  final String categoria;
+  final String sitioUrl;
+  final String destino;
 
   Service(
     this.id,
     this.nombre,
     this.imageUrl,
-    this.isPromoted,
-    this.category, //hospedaje, alimentacion o turismo
-    this.serviceUrl,
+    this.esDestacado,
+    this.categoria, //hospedaje, alimentacion o turismo
+    this.sitioUrl,
+    this.destino,
   );
 
   static final services = [
@@ -144,21 +146,24 @@ class Service {
         'assets/images/evento-ejemplo.jpg',
         true,
         'hospedaje',
-        'https://facebook.com'),
+        'https://facebook.com',
+        'tarapoto'),
     Service(
         2,
         'Evento de la semana en Altomayo',
         'assets/images/evento-ejemplo.jpg',
         true,
         'alimentacion',
-        'https://facebook.com'),
+        'https://facebook.com',
+        'altomayo'),
     Service(
         3,
         'Evento de la semana en Altomayo',
         'assets/images/evento-ejemplo.jpg',
         true,
         'turismo',
-        'https://facebook.com'),
+        'https://facebook.com',
+        'tarapoto'),
   ];
 }
 
@@ -358,7 +363,6 @@ class Attraction {
   final double latitud;
   final double longitud;
   final String socialUrl;
-  final String reference;
   final String shortDescription;
   final List<String> imageUrls;
   final bool tieneHospedaje;
@@ -371,7 +375,6 @@ class Attraction {
     this.latitud,
     this.longitud,
     this.socialUrl,
-    this.reference,
     this.shortDescription,
     this.tieneHospedaje,
     this.tieneTurismo,
@@ -386,7 +389,6 @@ class Attraction {
       -6.4022795,
       -76.2834683,
       'https://facebook.com',
-      'Reserva natural',
       'Magna nulla proident consequat irure labore laboris minim dolore et laborum veniam veniam velit. Deserunt id nostrud fugiat duis irure deserunt culpa sit excepteur ad do cupidatat. Magna voluptate laboris sit est qui nostrud mollit ex mollit officia ut.',
       true,
       true,
@@ -399,7 +401,6 @@ class Attraction {
       -6.4022795,
       -76.2834683,
       'https://facebook.com',
-      'Reserva natural',
       'Magna nulla proident consequat irure labore laboris minim dolore et laborum veniam veniam velit. Deserunt id nostrud fugiat duis irure deserunt culpa sit excepteur ad do cupidatat. Magna voluptate laboris sit est qui nostrud mollit ex mollit officia ut.',
       true,
       true,
@@ -412,7 +413,6 @@ class Attraction {
       -6.4022795,
       -76.2834683,
       'https://facebook.com',
-      'Reserva natural',
       'Magna nulla proident consequat irure labore laboris minim dolore et laborum veniam veniam velit. Deserunt id nostrud fugiat duis irure deserunt culpa sit excepteur ad do cupidatat. Magna voluptate laboris sit est qui nostrud mollit ex mollit officia ut.',
       true,
       true,

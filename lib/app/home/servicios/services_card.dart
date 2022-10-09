@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class EventCardStyle2 extends StatelessWidget {
-  final String imageUrl;
+class ServicesCard extends StatelessWidget {
+  final String destino;
   final String nombre;
 
-  const EventCardStyle2({
+  const ServicesCard({
     Key? key,
-    required this.imageUrl,
+    required this.destino,
     required this.nombre,
   }) : super(key: key);
 
@@ -20,7 +20,7 @@ class EventCardStyle2 extends StatelessWidget {
       child: Stack(
         children: [
           Ink.image(
-            image: AssetImage(imageUrl),
+            image: const AssetImage('assets/images/evento-ejemplo.jpg'),
             height: 220,
             width: 170,
             fit: BoxFit.cover,
@@ -28,6 +28,22 @@ class EventCardStyle2 extends StatelessWidget {
               onTap: () {},
             ),
           ),
+          Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                width: 75,
+                color: const Color(0xFF396A1E),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                child: Text(destino,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    )),
+              )),
           Positioned(
             bottom: 0,
             left: 0,

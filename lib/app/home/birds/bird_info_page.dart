@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:aves_de_san_martin/models/app_data.dart';
 
 class BirdInfoPage extends StatefulWidget {
-  final int birdId;
   const BirdInfoPage({super.key, required this.birdId});
+  final String birdId;
 
   @override
   State<BirdInfoPage> createState() => _BirdInfoPageState();
@@ -13,142 +13,193 @@ class _BirdInfoPageState extends State<BirdInfoPage>
     with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    final bird = Bird.birds[widget.birdId - 1];
     TabController tabController = TabController(length: 2, vsync: this);
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: AppBar(
-          toolbarHeight: 60.0,
-          centerTitle: true,
-          title:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Text(
-              bird.nombreCientifico,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins'),
+    CollectionReference aves = FirebaseFirestore.instance.collection('aves');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: aves.doc(widget.birdId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return const Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          return Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(60.0),
+              child: AppBar(
+                toolbarHeight: 60.0,
+                centerTitle: true,
+                title:
+                    _buildHeader(data['nombreCientifico'], data['nombreComun']),
+              ),
             ),
-            const SizedBox(height: 4),
-            Text(bird.nombreComun,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins')),
-          ]),
-        ),
-      ),
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(
-                      top: 255,
-                      left: 16,
-                      right: 16,
-                    ),
-                    child: _BirdTabsController(tabController: tabController),
-                  ),
-                  SizedBox(
-                    width: double.maxFinite,
-                    height: 450,
-                    child: TabBarView(controller: tabController, children: [
-                      const _InformationTab(),
-                      _HabitatTab(
-                        altitud: bird.altitud,
-                        habitat: bird.habitat,
-                      )
-                    ]),
-                  )
-                ],
-              )
-            ],
-          ),
-          _BirdImage(bird: bird),
-        ],
-      ),
+            body: Stack(
+              children: [
+                ListView(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(
+                            top: 255,
+                            left: 16,
+                            right: 16,
+                          ),
+                          child:
+                              _BirdTabsController(tabController: tabController),
+                        ),
+                        SizedBox(
+                          width: double.maxFinite,
+                          height: 350,
+                          child:
+                              TabBarView(controller: tabController, children: [
+                            _InformationTab(
+                              alimentacion: data['alimentacion'],
+                              familia: data['familia'],
+                              memotecnia: data['memotecnia'],
+                              nombreIngles: data['nombreIngles'],
+                              tamano: data['tamano'],
+                            ),
+                            _HabitatTab(
+                              altitud: data['altitud'],
+                              habitat: data['habitat'],
+                              status: data['status'],
+                            ),
+                          ]),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                _BirdImage(
+                  imageUrl: data['imageUrl'],
+                ),
+              ],
+            ),
+          );
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
     );
+  }
+
+  Column _buildHeader(nombreCientifico, nombreComun) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Text(
+        nombreCientifico,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+            fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Poppins'),
+      ),
+      const SizedBox(height: 4),
+      Text(nombreComun,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Poppins')),
+    ]);
   }
 }
 
 class _InformationTab extends StatelessWidget {
   const _InformationTab({
     Key? key,
+    required this.nombreIngles,
+    required this.alimentacion,
+    required this.familia,
+    required this.tamano,
+    required this.memotecnia,
   }) : super(key: key);
+  final String nombreIngles;
+  final String alimentacion;
+  final String familia;
+  final String tamano;
+  final String memotecnia;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text(
-          'The male Peruvian Sheartail has green upperparts. The underparts are mostly white with greenish sides of the breast and belly and a pink-purple gorget.  The tail is very long in the adult male. ',
-          style: TextStyle(fontFamily: 'Poppins'),
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          'The female has green upperparts and whitish or buff-and-white underparts. Both sexes have a relatively short, black, and nearly straight bill. The tail is relatively short, roundish with white spots to the tips except for the shorter and dark central pair of feathers.',
-          style: TextStyle(fontFamily: 'Poppins'),
-        ),
-        const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: [
-              TextSpan(
-                  text: 'Sub Especie: ',
+              const TextSpan(
+                  text: 'Nombre en inglés: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
-                text:
-                    'Peruvian Sheartail (Thaumastura cora), Lesson and Garnot, 1827.',
+                text: nombreIngles,
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
-            children: <TextSpan>[
-              TextSpan(
-                  text: 'Plumaje (Colores): ',
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+            children: [
+              const TextSpan(
+                  text: 'Familia: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
-                text:
-                    'greenish sides of the breast and belly and a pink-purple gorge ',
+                text: familia,
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: <TextSpan>[
+              const TextSpan(
+                  text: 'Alimentación: ',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
+                text: alimentacion,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        RichText(
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+            children: <TextSpan>[
+              const TextSpan(
                   text: 'Tamaño promedio: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: '40 - 50 cm.'),
+              TextSpan(text: tamano),
             ],
           ),
         ),
         const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: <TextSpan>[
-              TextSpan(
+              const TextSpan(
                   text: 'Memotecnia: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
-                text: "cha-cha'LAH-kah!",
+                text: memotecnia,
               ),
             ],
           ),
@@ -162,11 +213,13 @@ class _InformationTab extends StatelessWidget {
 class _HabitatTab extends StatelessWidget {
   final String habitat;
   final String altitud;
+  final String status;
 
   const _HabitatTab({
     Key? key,
     required this.habitat,
     required this.altitud,
+    required this.status,
   }) : super(key: key);
 
   @override
@@ -212,7 +265,7 @@ class _HabitatTab extends StatelessWidget {
             style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: <TextSpan>[
               TextSpan(
-                  text: 'Altitud',
+                  text: 'Altitud: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(text: '1500 - 2000 m.s.n.m.'),
             ],
@@ -259,10 +312,10 @@ class _BirdTabsController extends StatelessWidget {
 class _BirdImage extends StatelessWidget {
   const _BirdImage({
     Key? key,
-    required this.bird,
+    required this.imageUrl,
   }) : super(key: key);
 
-  final Bird bird;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -273,8 +326,9 @@ class _BirdImage extends StatelessWidget {
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(25),
               bottomRight: Radius.circular(25)),
-          image: DecorationImage(
-              fit: BoxFit.cover, image: AssetImage(bird.imageUrl)),
+          image: const DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/images/ave-ejemplo.jpg')),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import '../birds/bird_info_page.dart';
 
-class BirdCardStyle1 extends StatelessWidget {
+class HomeBirdCard extends StatelessWidget {
   final String nombreCientifico;
   final String nombreComun;
-  final String description;
+  final String habitat;
   final String imageUrl;
-  final int id;
+  final String id;
 
-  const BirdCardStyle1({
+  const HomeBirdCard({
     Key? key,
     required this.nombreCientifico,
     required this.nombreComun,
-    required this.description,
+    required this.habitat,
     required this.imageUrl,
     required this.id,
   }) : super(key: key);
@@ -27,37 +28,29 @@ class BirdCardStyle1 extends StatelessWidget {
           _Image(
             iu: imageUrl,
           ),
-          _CardInfo(nct: nombreCientifico, ncm: nombreComun, dsc: description),
-          _Button(
-            index: id,
-          )
+          _CardInfo(nct: nombreCientifico, ncm: nombreComun, dsc: habitat),
+          Positioned(
+              bottom: 8,
+              left: 8,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: const Color(0xFF396A1E)),
+                child: const Text(
+                  'Saber más',
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
+                ),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BirdInfoPage(birdId: id)),
+                  );
+                },
+              )),
         ],
       ),
     );
-  }
-}
-
-class _Button extends StatelessWidget {
-  final int index;
-  const _Button({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        bottom: 8,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color(0xFF396A1E)),
-          child: const Text(
-            'Saber más',
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
-          ),
-          onPressed: () {},
-        ));
   }
 }
 
@@ -144,8 +137,10 @@ class _Image extends StatelessWidget {
       child: Container(
         height: 250,
         width: 250,
-        decoration: BoxDecoration(
-            image: DecorationImage(fit: BoxFit.cover, image: AssetImage(iu))),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/ave-ejemplo.jpg'))),
       ),
     );
   }

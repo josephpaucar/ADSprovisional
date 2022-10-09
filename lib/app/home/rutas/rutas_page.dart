@@ -1,7 +1,10 @@
-import 'package:aves_de_san_martin/rutas/rutas_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:aves_de_san_martin/models/app_data.dart';
+import 'package:aves_de_san_martin/rutas/rutas_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'all_birds_in_attraction_page.dart';
+import 'all_posts_in_attraction_page.dart';
 
 class RutasPage extends StatefulWidget {
   const RutasPage({super.key});
@@ -11,83 +14,103 @@ class RutasPage extends StatefulWidget {
 }
 
 class _RutasPageState extends State<RutasPage> {
-  final attractions = Attraction.attractoins;
   final _controller = RutasController();
 
   @override
   Widget build(BuildContext context) {
-    final Marker llanteriaMarker = Marker(
-        onTap: () {
-          showModalBottomSheet(
-              backgroundColor: Colors.transparent,
-              isScrollControlled: true,
-              context: context,
-              builder: (builder) {
-                return _BottomSheet(
-                  id: attractions[0].id,
-                  description: attractions[0].shortDescription,
-                  title: attractions[0].name,
-                  tieneHospedaje: attractions[0].tieneHospedaje,
-                  tieneTurismo: attractions[0].tieneTurismo,
-                  tieneAlimentacion: attractions[0].tieneAlimentacion,
-                );
-              });
-        },
-        markerId: MarkerId(attractions[0].name),
-        infoWindow: InfoWindow(title: attractions[0].name),
-        icon: BitmapDescriptor.defaultMarkerWithHue(13),
-        position: LatLng(attractions[0].latitud, attractions[0].longitud));
-
-    final Marker fanMarker = Marker(
-        onTap: () {
-          showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              backgroundColor: Colors.transparent,
-              builder: (builder) {
-                return _BottomSheet(
-                  id: attractions[1].id,
-                  description: attractions[1].shortDescription,
-                  title: attractions[1].name,
-                  tieneHospedaje: attractions[1].tieneHospedaje,
-                  tieneTurismo: attractions[1].tieneTurismo,
-                  tieneAlimentacion: attractions[1].tieneAlimentacion,
-                );
-              });
-        },
-        markerId: const MarkerId('fundoAltoNieva'),
-        infoWindow: const InfoWindow(title: 'Fundo Alto Nieva'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(13),
-        position: const LatLng(-5.6731361, -77.7681251));
+    Widget _buildMarkers(BuildContext context) {
+      return StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("attraction")
+              .where("id", isEqualTo: 'aconabikh')
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return GoogleMap(
+              initialCameraPosition: _controller.initialCameraPosition,
+              myLocationButtonEnabled: true,
+              onMapCreated: _controller.onMapCreated,
+              compassEnabled: false,
+              markers: snapshot.data!.docs.map((document) {
+                return Marker(
+                    onTap: () {
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (builder) {
+                            return _BottomSheet(
+                              id: document['id'],
+                              description: document['descripcion'],
+                              title: document['nombre'],
+                              tieneHospedaje: document['tieneHospedaje'],
+                              tieneTurismo: document['tieneTurismo'],
+                              tieneAlimentacion: document['tieneAlimentacion'],
+                              avesEnlaZona: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AllBirdsInAttractionPage(
+                                            attractionId: document['id'],
+                                          )),
+                                );
+                              },
+                              fotosEnlaZona: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          AllPostsInAttractionPage(
+                                            attractionId: document['id'],
+                                          )),
+                                );
+                              },
+                            );
+                          });
+                    },
+                    markerId: MarkerId(document['nombre']),
+                    infoWindow: InfoWindow(title: document['nombre']),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(13),
+                    position:
+                        LatLng(document['latitud'], document['longitud']));
+              }).toSet(),
+            );
+          });
+    }
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Aves de San Martin',
-          style: TextStyle(fontFamily: 'Pacifico'),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Aves de San Martin',
+            style: TextStyle(fontFamily: 'BreePeru'),
+          ),
         ),
-      ),
-      body: GoogleMap(
-        initialCameraPosition: _controller.initialCameraPosition,
-        myLocationButtonEnabled: true,
-        onMapCreated: _controller.onMapCreated,
-        compassEnabled: false,
-        markers: {fanMarker, llanteriaMarker},
-        // onTap: _controller.onTap,
-      ),
-    );
+        body: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              Expanded(
+                child: _buildMarkers(context),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+              )
+            ],
+          ),
+        ));
   }
 }
 
 class _BottomSheet extends StatelessWidget {
-  final int id;
-  final String title;
-  final String description;
-  final bool tieneHospedaje;
-  final bool tieneTurismo;
-  final bool tieneAlimentacion;
-
   const _BottomSheet({
     Key? key,
     required this.title,
@@ -96,7 +119,18 @@ class _BottomSheet extends StatelessWidget {
     required this.tieneHospedaje,
     required this.tieneTurismo,
     required this.tieneAlimentacion,
+    required this.avesEnlaZona,
+    required this.fotosEnlaZona,
   }) : super(key: key);
+
+  final String id;
+  final String title;
+  final String description;
+  final bool tieneHospedaje;
+  final bool tieneTurismo;
+  final bool tieneAlimentacion;
+  final VoidCallback avesEnlaZona;
+  final VoidCallback fotosEnlaZona;
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +170,7 @@ class _BottomSheet extends StatelessWidget {
             const SizedBox(height: 16),
             Text(title,
                 textAlign: TextAlign.left,
-                style: const TextStyle(fontFamily: 'Pacifico', fontSize: 16)),
+                style: const TextStyle(fontFamily: 'BreePeru', fontSize: 16)),
             const SizedBox(height: 4),
             Text(description,
                 textAlign: TextAlign.left,
@@ -175,7 +209,7 @@ class _BottomSheet extends StatelessWidget {
                           Icons.directions_bus_rounded,
                           color: Color(0xFF9B442B),
                         ),
-                        Text('Turismo',
+                        Text('Guía turística',
                             style:
                                 TextStyle(fontFamily: 'Poppins', fontSize: 12))
                       ]),
@@ -224,7 +258,7 @@ class _BottomSheet extends StatelessWidget {
             Row(
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: avesEnlaZona,
                   child: const Text(
                     'Aves en la zona',
                     style: TextStyle(fontFamily: 'Poppins'),
@@ -232,7 +266,7 @@ class _BottomSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: fotosEnlaZona,
                   child: const Text('Fotos en la zona',
                       style: TextStyle(fontFamily: 'Poppins')),
                 )

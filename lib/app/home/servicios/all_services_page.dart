@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:aves_de_san_martin/widgets/widgets.dart';
 
-class AllEventsServicesPage extends StatelessWidget {
-  const AllEventsServicesPage({super.key});
+class AllServicesPage extends StatelessWidget {
+  const AllServicesPage({super.key, required this.initialIndex});
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 0,
+      initialIndex: initialIndex,
       length: 3,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text('Aves de San Martin',
-              style: TextStyle(fontFamily: 'Pacifico')),
+              style: TextStyle(fontFamily: 'BreePeru')),
           bottom: const TabBar(
             labelColor: Color(0xFF9B442B),
             unselectedLabelColor: Colors.grey,
@@ -31,27 +32,30 @@ class AllEventsServicesPage extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: <Widget>[
             SingleChildScrollView(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: EventsTwoColumnGridBuilder(),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                child: ServicesTwoColumnGridBuilder(
+                  serviceCategory: 'hospedaje',
+                ),
               ),
             ),
             SingleChildScrollView(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: ServicesTwoColumnGridBuilder(),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                child: ServicesTwoColumnGridBuilder(
+                  serviceCategory: 'agenciaDeViajes',
+                ),
               ),
             ),
             SingleChildScrollView(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-                child: EventsTwoColumnGridBuilder(),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                child: ServicesTwoColumnGridBuilder(
+                  serviceCategory: 'restaurante',
+                ),
               ),
             ),
           ],

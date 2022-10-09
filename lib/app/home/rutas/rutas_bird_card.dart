@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
-class BirdCardStyle3 extends StatelessWidget {
-  final int id;
-  final String imageUrl;
-  final String nombreCientifico;
-  final String nombreComun;
-
-  const BirdCardStyle3({
+class RutasBirdCard extends StatelessWidget {
+  const RutasBirdCard({
     Key? key,
     required this.imageUrl,
     required this.nombreCientifico,
     required this.nombreComun,
     required this.id,
+    required this.birdInfo,
   }) : super(key: key);
+
+  final String id;
+  final String imageUrl;
+  final String nombreCientifico;
+  final String nombreComun;
+  final VoidCallback birdInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +25,10 @@ class BirdCardStyle3 extends StatelessWidget {
       child: Stack(
         children: [
           Ink.image(
-            image: AssetImage(imageUrl),
+            image: const AssetImage('assets/images/ave-ejemplo.jpg'),
             fit: BoxFit.cover,
             child: InkWell(
-              onTap: () {},
+              onTap: birdInfo,
             ),
           ),
           _Footer(
@@ -53,6 +55,7 @@ class _Footer extends StatelessWidget {
     return Positioned(
       bottom: 0,
       left: 0,
+      right: 0,
       child: Container(
         color: Colors.black26.withOpacity(0.2),
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),

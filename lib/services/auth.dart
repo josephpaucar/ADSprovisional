@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -12,6 +13,7 @@ abstract class AuthBase {
 
 class Auth implements AuthBase {
   final _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
@@ -34,6 +36,14 @@ class Auth implements AuthBase {
       email: email,
       password: password,
     );
+    String? userEmail = userCredential.user!.email;
+    final userName = userEmail!.substring(0, userEmail.indexOf('@'));
+
+    await _firestore.collection('users').doc(userCredential.user!.uid).set({
+      'email': email,
+      'username': userName,
+      'uid': userCredential.user!.uid,
+    });
     return userCredential.user!;
   }
 
@@ -51,6 +61,12 @@ class Auth implements AuthBase {
         UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(credential);
         user = userCredential.user;
+        await _firestore.collection('users').doc(userCredential.user!.uid).set({
+          'email': user!.email,
+          'username': user.displayName,
+          'uid': userCredential.user!.uid,
+        });
+
         return user;
       } on FirebaseAuthException catch (e) {
         throw FirebaseAuthException(

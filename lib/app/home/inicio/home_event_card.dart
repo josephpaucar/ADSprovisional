@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class EventCardStyle1 extends StatelessWidget {
+class HomeEventCard extends StatelessWidget {
   final String imageUrl;
   final String nombre;
 
-  const EventCardStyle1({
+  const HomeEventCard({
     Key? key,
     required this.imageUrl,
     required this.nombre,
@@ -66,7 +66,7 @@ class _Image extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Ink.image(
-      image: AssetImage(iu),
+      image: const AssetImage('assets/images/evento-ejemplo2.jpg'),
       height: 220,
       width: 170,
       fit: BoxFit.cover,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:aves_de_san_martin/models/app_data.dart';
-import '../widgets/widgets.dart';
+import '../../../widgets/widgets.dart';
 
 class AllPostsInAttractionPage extends StatelessWidget {
-  AllPostsInAttractionPage({super.key});
+  AllPostsInAttractionPage({super.key, required this.attractionId});
+  final String attractionId;
 
   final List<Post> posts = Post.posts;
 
@@ -11,19 +12,18 @@ class AllPostsInAttractionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Post> postsInAttraction = [];
 
-    /*
     for (int i = 0; i < posts.length; i++) {
       if (attractionId == posts[i].tomadoEn) {
         postsInAttraction.add(posts[i]);
       }
     }
-    */
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
             'Aves de San Martin',
-            style: TextStyle(fontFamily: 'Pacifico'),
+            style: TextStyle(fontFamily: 'BreePeru'),
           ),
         ),
         body: ListView.builder(
