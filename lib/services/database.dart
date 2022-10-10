@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'api_path.dart';
-import '../app/home/models/attrantions.dart';
 import '../app/home/models/recomendation.dart';
 
 abstract class Database {
@@ -11,7 +10,7 @@ abstract class Database {
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
 class FirestoreDatabase implements Database {
-  FirestoreDatabase({required this.uid}) : assert(uid != null);
+  FirestoreDatabase({required this.uid});
   final String uid;
 
   @override

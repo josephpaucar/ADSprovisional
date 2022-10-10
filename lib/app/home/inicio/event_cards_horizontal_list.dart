@@ -23,9 +23,9 @@ class EventCardsHorizontalList extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: snapshot.data!.docs.map((document) {
                 return HomeEventCard(
-                  imageUrl: document['imageUrl'],
-                  nombre: document['nombre'],
-                );
+                    imageUrl: document['imageUrl'],
+                    nombre: document['nombre'],
+                    siteUrl: document['webUrl']);
               }).toList(),
             ),
           );

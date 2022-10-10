@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../../widgets/widgets.dart';
+
+import 'home_bird_card.dart';
 
 class BirdCardsHorizontalList extends StatelessWidget {
   const BirdCardsHorizontalList({super.key});

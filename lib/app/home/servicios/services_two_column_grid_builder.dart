@@ -34,6 +34,8 @@ class ServicesTwoColumnGridBuilder extends StatelessWidget {
             return ServicesCard(
               destino: document['destino'],
               nombre: document['nombre'],
+              imageUrl: document['imageUrl'],
+              webUrl: document['webUrl'],
             );
           }).toList(),
         );

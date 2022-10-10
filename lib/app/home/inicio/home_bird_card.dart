@@ -137,10 +137,8 @@ class _Image extends StatelessWidget {
       child: Container(
         height: 250,
         width: 250,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/ave-ejemplo.jpg'))),
+        decoration: BoxDecoration(
+            image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(iu))),
       ),
     );
   }

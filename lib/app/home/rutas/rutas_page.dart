@@ -1,6 +1,6 @@
+import 'package:aves_de_san_martin/app/home/rutas/rutas_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:aves_de_san_martin/rutas/rutas_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'all_birds_in_attraction_page.dart';
@@ -18,12 +18,10 @@ class _RutasPageState extends State<RutasPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildMarkers(BuildContext context) {
+    Widget buildMarkers(BuildContext context) {
       return StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection("attraction")
-              .where("id", isEqualTo: 'aconabikh')
-              .snapshots(),
+          stream:
+              FirebaseFirestore.instance.collection("attraction").snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
@@ -51,6 +49,7 @@ class _RutasPageState extends State<RutasPage> {
                               tieneHospedaje: document['tieneHospedaje'],
                               tieneTurismo: document['tieneTurismo'],
                               tieneAlimentacion: document['tieneAlimentacion'],
+                              imageUrl: document['imageUrl'],
                               avesEnlaZona: () {
                                 Navigator.push(
                                   context,
@@ -98,7 +97,7 @@ class _RutasPageState extends State<RutasPage> {
           child: Column(
             children: [
               Expanded(
-                child: _buildMarkers(context),
+                child: buildMarkers(context),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -121,6 +120,7 @@ class _BottomSheet extends StatelessWidget {
     required this.tieneAlimentacion,
     required this.avesEnlaZona,
     required this.fotosEnlaZona,
+    required this.imageUrl,
   }) : super(key: key);
 
   final String id;
@@ -131,6 +131,7 @@ class _BottomSheet extends StatelessWidget {
   final bool tieneAlimentacion;
   final VoidCallback avesEnlaZona;
   final VoidCallback fotosEnlaZona;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -232,24 +233,18 @@ class _BottomSheet extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             SizedBox(
-              height: 170,
+              height: 200,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: const [
-                  Image(
-                    image: AssetImage('assets/images/evento-ejemplo.jpg'),
-                    height: 170,
-                    width: 220,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Image(
-                    image: AssetImage('assets/images/evento-ejemplo2.jpg'),
-                    height: 170,
-                    width: 220,
-                    fit: BoxFit.cover,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Image(
+                      image: NetworkImage(imageUrl),
+                      height: 200,
+                      width: 260,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 ],
               ),

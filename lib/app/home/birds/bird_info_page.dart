@@ -326,9 +326,8 @@ class _BirdImage extends StatelessWidget {
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(25),
               bottomRight: Radius.circular(25)),
-          image: const DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/images/ave-ejemplo.jpg')),
+          image: DecorationImage(
+              fit: BoxFit.contain, image: NetworkImage(imageUrl)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),

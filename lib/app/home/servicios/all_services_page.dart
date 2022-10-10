@@ -1,5 +1,5 @@
+import 'package:aves_de_san_martin/app/home/servicios/services_two_column_grid_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:aves_de_san_martin/widgets/widgets.dart';
 
 class AllServicesPage extends StatelessWidget {
   const AllServicesPage({super.key, required this.initialIndex});

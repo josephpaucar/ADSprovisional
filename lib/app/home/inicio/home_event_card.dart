@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class HomeEventCard extends StatelessWidget {
+class HomeEventCard extends StatefulWidget {
   final String imageUrl;
   final String nombre;
+  final String siteUrl;
 
   const HomeEventCard({
     Key? key,
     required this.imageUrl,
     required this.nombre,
+    required this.siteUrl,
   }) : super(key: key);
+
+  @override
+  State<HomeEventCard> createState() => _HomeEventCardState();
+}
+
+class _HomeEventCardState extends State<HomeEventCard> {
+  Future<void>? _launched;
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +38,23 @@ class HomeEventCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Stack(
         children: [
-          _Image(
-            iu: imageUrl,
+          Ink.image(
+            image: NetworkImage(widget.imageUrl),
+            height: 220,
+            width: 170,
+            fit: BoxFit.cover,
+            child: InkWell(
+              onTap: () async {
+                final uri = Uri.parse(widget.siteUrl);
+                setState(() {
+                  _launched = _launchInBrowser(uri);
+                });
+              },
+            ),
           ),
           const _Header(),
           _Footer(
-            nm: nombre,
+            nm: widget.nombre,
           )
         ],
       ),
@@ -55,28 +85,6 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _Image extends StatelessWidget {
-  final String iu;
-
-  const _Image({
-    Key? key,
-    required this.iu,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Ink.image(
-      image: const AssetImage('assets/images/evento-ejemplo2.jpg'),
-      height: 220,
-      width: 170,
-      fit: BoxFit.cover,
-      child: InkWell(
-        onTap: () {},
-      ),
-    );
-  }
-}
-
 class _Footer extends StatelessWidget {
   final String nm;
   const _Footer({
@@ -89,6 +97,7 @@ class _Footer extends StatelessWidget {
     return Positioned(
       bottom: 0,
       left: 0,
+      right: 0,
       child: Container(
         width: 150,
         color: Colors.black26.withOpacity(0.2),

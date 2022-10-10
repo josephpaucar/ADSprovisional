@@ -31,6 +31,8 @@ class ServicesPage extends StatelessWidget {
                 return ServicesCard(
                   destino: document['destino'],
                   nombre: document['nombre'],
+                  imageUrl: document['imageUrl'],
+                  webUrl: document['webUrl'],
                 );
               }).toList(),
             ),
@@ -61,6 +63,8 @@ class ServicesPage extends StatelessWidget {
                 return ServicesCard(
                   destino: document['destino'],
                   nombre: document['nombre'],
+                  imageUrl: document['imageUrl'],
+                  webUrl: document['webUrl'],
                 );
               }).toList(),
             ),
@@ -91,6 +95,8 @@ class ServicesPage extends StatelessWidget {
                 return ServicesCard(
                   destino: document['destino'],
                   nombre: document['nombre'],
+                  imageUrl: document['imageUrl'],
+                  webUrl: document['webUrl'],
                 );
               }).toList(),
             ),

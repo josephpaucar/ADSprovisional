@@ -25,7 +25,7 @@ class RutasBirdCard extends StatelessWidget {
       child: Stack(
         children: [
           Ink.image(
-            image: const AssetImage('assets/images/ave-ejemplo.jpg'),
+            image: NetworkImage(imageUrl),
             fit: BoxFit.cover,
             child: InkWell(
               onTap: birdInfo,

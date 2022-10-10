@@ -49,13 +49,14 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Text(
                     data['username'],
-                    style: TextStyle(fontSize: 24, fontFamily: 'Poppins'),
+                    style: const TextStyle(fontSize: 24, fontFamily: 'Poppins'),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(data['email'],
-                      style: TextStyle(fontSize: 18, fontFamily: 'Poppins')),
+                      style:
+                          const TextStyle(fontSize: 18, fontFamily: 'Poppins')),
                   const SizedBox(
                     height: 10,
                   ),

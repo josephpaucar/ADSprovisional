@@ -1,8 +1,10 @@
+import 'package:aves_de_san_martin/app/home/inicio/search_input_buttom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'package:aves_de_san_martin/widgets/widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
+import 'bird_cards_horizontal_list.dart';
+import 'event_cards_horizontal_list.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -32,7 +34,14 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 25),
           const _SectionTitle(title: 'Próximos Eventos'),
           const SizedBox(height: 12),
-          EventCardsHorizontalList(),
+          const EventCardsHorizontalList(),
+          const SizedBox(height: 25),
+          const _SectionTitle(title: 'Patrocinado por'),
+          const SizedBox(height: 12),
+          const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: _SponsorsLogos(),
+          ),
           const SizedBox(height: 70),
         ],
       )),
@@ -59,6 +68,44 @@ class HomePage extends StatelessWidget {
             }).toList(),
           );
         });
+  }
+}
+
+class _SponsorsLogos extends StatelessWidget {
+  const _SponsorsLogos({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 80,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Image.asset('assets/images/canatur.jpeg'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Image.asset('assets/images/cgdam.jpeg'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Image.asset('assets/images/cgdt.jpeg'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Image.asset('assets/images/drtpe.jpeg'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset('assets/images/helvetas.jpeg'),
+          ),
+        ],
+      ),
+    );
   }
 }
 

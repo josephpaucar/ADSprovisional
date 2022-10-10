@@ -1,4 +1,4 @@
-import 'package:aves_de_san_martin/rutas/map_style.dart';
+import 'package:aves_de_san_martin/app/home/rutas/map_style.dart';
 import 'package:flutter/widgets.dart' show ChangeNotifier;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

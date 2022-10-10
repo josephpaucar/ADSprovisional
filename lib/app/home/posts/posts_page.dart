@@ -1,29 +1,43 @@
+import 'package:aves_de_san_martin/app/home/posts/create_post_page.dart';
+import 'package:aves_de_san_martin/app/home/posts/single_post.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:aves_de_san_martin/models/app_data.dart';
 
-import '../posts/single_post.dart';
-
-class AllPostsInAttractionPage extends StatelessWidget {
-  AllPostsInAttractionPage({super.key, required this.attractionId});
-  final String attractionId;
-
-  final List<Post> posts = Post.posts;
+class PostsPage extends StatelessWidget {
+  PostsPage({super.key});
+  final posts = Post.posts;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: const Text(
             'Aves de San Martin',
             style: TextStyle(fontFamily: 'BreePeru'),
           ),
+          actions: [
+            Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreatePostPage()),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add_a_photo,
+                    size: 24.0,
+                  ),
+                )),
+          ],
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('posts')
-              .where('attractionId', isEqualTo: attractionId)
+              .orderBy('datePublished', descending: true)
               .snapshots(),
           builder: (context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
