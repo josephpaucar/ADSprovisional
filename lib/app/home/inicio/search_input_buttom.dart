@@ -1,4 +1,8 @@
+import 'package:aves_de_san_martin/app/home/birds/bird_catalog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../birds/bird_info_page.dart';
 
 class SearchInputButton extends StatelessWidget {
   const SearchInputButton({
@@ -13,29 +17,26 @@ class SearchInputButton extends StatelessWidget {
         height: 45,
         child: ElevatedButton(
           style: ButtonStyle(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               shape: MaterialStateProperty.all(const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(5))))),
           onPressed: () {
-            showSearch(
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BirdCatalog()),
+            );
+            /*showSearch(
               context: context,
               delegate: MySearchDelegate(),
-            );
+            );*/
           },
-          child: Row(
-            children: const [
-              Icon(Icons.search),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Buscar por nombre del ave',
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w400),
-              ),
-            ],
+          child: const Text(
+            'Catálogo de aves',
+            style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 18,
+                color: Colors.black87,
+                fontWeight: FontWeight.w600),
           ),
         ));
   }
@@ -43,7 +44,8 @@ class SearchInputButton extends StatelessWidget {
 
 class MySearchDelegate extends SearchDelegate {
   @override
-  String get searchFieldLabel => 'Buscar por nombre';
+  String get searchFieldLabel => 'Buscar por nombre científico';
+
   @override
   List<Widget>? buildActions(BuildContext context) => [
         IconButton(
@@ -64,21 +66,63 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    throw UnimplementedError();
+    return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection('aves')
+            .where('nombreCientifico', isGreaterThanOrEqualTo: query)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Text('An error ocurred.');
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) => ListTile(
+              title:
+                  Text(snapshot.data!.docs[index].data()['nombreCientifico']),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BirdInfoPage(
+                          birdId: snapshot.data!.docs[index].data()['id'])),
+                );
+              },
+            ),
+          );
+        });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = ['Brazil', 'China', 'India', 'Russia', 'USA'];
+    return FutureBuilder(
+        future: FirebaseFirestore.instance.collection('aves').get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Text('An error ocurred.');
+          }
 
-    return ListView.builder(
-        itemCount: suggestions.length,
-        itemBuilder: (context, index) {
-          final suggestion = suggestions[index];
-          return ListTile(
-            title: Text(suggestion),
-            onTap: () {},
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) => ListTile(
+              title:
+                  Text(snapshot.data!.docs[index].data()['nombreCientifico']),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BirdInfoPage(
+                          birdId: snapshot.data!.docs[index].data()['id'])),
+                );
+              },
+            ),
           );
         });
   }

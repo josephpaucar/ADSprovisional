@@ -22,7 +22,8 @@ class FirestoreMethods {
       String photoUrl =
           await Storage().uploadImageToStorage('posts', file, true);
       String postId = const Uuid().v1();
-      String _attractionId = attractionId.toLowerCase().replaceAll(' ', '');
+      String parsedAttractionId =
+          attractionId.toLowerCase().replaceAll(' ', '');
       Post post = Post(
         description: description,
         title: title,
@@ -32,7 +33,7 @@ class FirestoreMethods {
         datePublished: DateTime.now(),
         photoUrl: photoUrl,
         likes: [],
-        attractionId: _attractionId,
+        attractionId: parsedAttractionId,
       );
       _firestore.collection('posts').doc(postId).set(post.toJson());
       res = 'success';
@@ -54,7 +55,8 @@ class FirestoreMethods {
         });
       }
     } catch (e) {
-      print(e.toString());
+      // ignore: unused_local_variable
+      String res = e.toString();
     }
   }
 
@@ -76,7 +78,39 @@ class FirestoreMethods {
           'datePublished': DateTime.now(),
         });
       } else {
-        print('Text is empty');
+        // ignore: unused_local_variable
+        String res = 'Text is empty';
+      }
+    } catch (e) {
+      // ignore: unused_local_variable
+      String res = e.toString();
+    }
+  }
+
+  Future<void> attractionRating(
+      String attractionid, double rating, String uid) async {
+    try {
+      if (!rating.isNaN) {
+        String ratingId = const Uuid().v1();
+        await _firestore
+            .collection('attraction')
+            .doc(attractionid)
+            .collection('ratings')
+            .doc(ratingId)
+            .set({
+          'uid': uid,
+          'rating': rating,
+          'ratingId': ratingId,
+          'datePublished': DateTime.now(),
+        });
+        await _firestore.collection('attraction').doc(attractionid).update({
+          'ratedBy': FieldValue.arrayUnion([uid])
+        });
+        await _firestore.collection('attraction').doc(attractionid).update({
+          'rates': FieldValue.arrayUnion([rating])
+        });
+      } else {
+        print('Raiting was not selected');
       }
     } catch (e) {
       print(e.toString());

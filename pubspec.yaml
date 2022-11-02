@@ -39,7 +39,10 @@ dependencies:
   firebase_storage: ^10.3.11
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_bloc: ^8.1.1
+  flutter_rating_bar: ^4.0.1
   google_maps_flutter: ^2.2.1
   google_sign_in: ^5.4.2
   image_picker: ^0.8.6
@@ -76,6 +79,7 @@ flutter:
     - assets/images/cgdt.jpeg
     - assets/images/drtpe.jpeg
     - assets/images/helvetas.jpeg
+    - assets/images/secompetitivo.jpeg
     - assets/sounds/amazon-kingfisher.mp3
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -91,7 +95,7 @@ flutter:
     - family: AdsCustomIcons
       fonts:
         - asset: fonts/AdsCustomIcons.ttf
-        
+
     - family: Pacifico
       fonts:
         - asset: fonts/Pacifico-Regular.ttf
@@ -114,3 +118,5 @@ flutter:
           style: italic
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

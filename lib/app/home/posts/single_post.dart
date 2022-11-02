@@ -1,7 +1,6 @@
 import 'package:aves_de_san_martin/app/home/posts/post_comments_page.dart';
 import 'package:aves_de_san_martin/common_widgets/like_animation.dart';
 import 'package:aves_de_san_martin/services/firestore_methods.dart';
-import 'package:aves_de_san_martin/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,28 +15,6 @@ class SinglePost extends StatefulWidget {
 }
 
 class _SinglePostState extends State<SinglePost> {
-  int commentLen = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    getComments();
-  }
-
-  void getComments() async {
-    try {
-      QuerySnapshot snap = await FirebaseFirestore.instance
-          .collection('posts')
-          .doc(widget.snapshot['postId'])
-          .collection('comments')
-          .get();
-      commentLen = snap.docs.length;
-    } catch (e) {
-      showSnackBar(e.toString(), context);
-    }
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -121,11 +98,22 @@ class _SinglePostState extends State<SinglePost> {
           ]),
         ),
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          width: double.infinity,
-          child: Text('$commentLen comentarios',
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 12)),
-        ),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            width: double.infinity,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .doc(widget.snapshot['postId'])
+                  .collection('comments')
+                  .snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final commentsLen = snap.data!.docs.length;
+                return Text('$commentsLen comentarios');
+              },
+            )),
         Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             width: double.infinity,

@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,15 @@ class BirdInfoPage extends StatefulWidget {
 
 class _BirdInfoPageState extends State<BirdInfoPage>
     with TickerProviderStateMixin {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
@@ -54,35 +64,31 @@ class _BirdInfoPageState extends State<BirdInfoPage>
                             left: 16,
                             right: 16,
                           ),
-                          child:
-                              _BirdTabsController(tabController: tabController),
+                          child: _birdTabsController(tabController),
                         ),
                         SizedBox(
                           width: double.maxFinite,
                           height: 350,
                           child:
                               TabBarView(controller: tabController, children: [
-                            _InformationTab(
-                              alimentacion: data['alimentacion'],
-                              familia: data['familia'],
-                              memotecnia: data['memotecnia'],
-                              nombreIngles: data['nombreIngles'],
-                              tamano: data['tamano'],
-                            ),
-                            _HabitatTab(
-                              altitud: data['altitud'],
-                              habitat: data['habitat'],
-                              status: data['status'],
-                            ),
+                            _informationTab(
+                                audioPlayer,
+                                data['alimentacion'],
+                                data['familia'],
+                                data['memotecnia'],
+                                data['nombreIngles'],
+                                data['tamano'],
+                                data['cantoUrl'],
+                                isPlaying),
+                            _habitatTab(data['altitud'], data['habitat'],
+                                data['status']),
                           ]),
                         )
                       ],
                     )
                   ],
                 ),
-                _BirdImage(
-                  imageUrl: data['imageUrl'],
-                ),
+                _birdImage(data['imageUrl']),
               ],
             ),
           );
@@ -110,25 +116,31 @@ class _BirdInfoPageState extends State<BirdInfoPage>
               fontFamily: 'Poppins')),
     ]);
   }
-}
 
-class _InformationTab extends StatelessWidget {
-  const _InformationTab({
-    Key? key,
-    required this.nombreIngles,
-    required this.alimentacion,
-    required this.familia,
-    required this.tamano,
-    required this.memotecnia,
-  }) : super(key: key);
-  final String nombreIngles;
-  final String alimentacion;
-  final String familia;
-  final String tamano;
-  final String memotecnia;
+  Widget _birdTabsController(tabController) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: PreferredSize(
+        preferredSize: const Size.fromHeight(40.0),
+        child: Align(
+          alignment: Alignment.center,
+          child: TabBar(
+              controller: tabController,
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.grey,
+              indicator: const UnderlineTabIndicator(
+                  borderSide: BorderSide(color: Color(0xFF396A1E), width: 3.0)),
+              tabs: const [
+                SizedBox(height: 40, child: Tab(text: "Información")),
+                SizedBox(height: 40, child: Tab(text: "Hábitat"))
+              ]),
+        ),
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _informationTab(audioPlayer, alimentacion, familia, memotecnia,
+      nombreIngles, tamano, cantoUrl, isPlaying) {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -205,25 +217,38 @@ class _InformationTab extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
+        const Text(
+          'Canto:',
+          style: TextStyle(
+              color: Colors.black87,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        CircleAvatar(
+          backgroundColor: const Color(0xFF9ED67C).withOpacity(0.5),
+          child: IconButton(
+            icon: Icon(
+              isPlaying ? Icons.pause : Icons.play_arrow,
+              color: const Color(0xFF9B442B),
+            ),
+            onPressed: () async {
+              if (isPlaying) {
+                await audioPlayer.stop();
+                isPlaying = true;
+              } else {
+                String url = cantoUrl;
+                await audioPlayer.play(UrlSource(url));
+                isPlaying = false;
+              }
+            },
+          ),
+        )
       ]),
     );
   }
-}
 
-class _HabitatTab extends StatelessWidget {
-  final String habitat;
-  final String altitud;
-  final String status;
-
-  const _HabitatTab({
-    Key? key,
-    required this.habitat,
-    required this.altitud,
-    required this.status,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _habitatTab(altitud, habitat, status) {
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -275,50 +300,8 @@ class _HabitatTab extends StatelessWidget {
       ]),
     );
   }
-}
 
-class _BirdTabsController extends StatelessWidget {
-  const _BirdTabsController({
-    Key? key,
-    required this.tabController,
-  }) : super(key: key);
-
-  final TabController tabController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: PreferredSize(
-        preferredSize: const Size.fromHeight(40.0),
-        child: Align(
-          alignment: Alignment.center,
-          child: TabBar(
-              controller: tabController,
-              labelColor: Colors.black87,
-              unselectedLabelColor: Colors.grey,
-              indicator: const UnderlineTabIndicator(
-                  borderSide: BorderSide(color: Color(0xFF396A1E), width: 3.0)),
-              tabs: const [
-                SizedBox(height: 40, child: Tab(text: "Información")),
-                SizedBox(height: 40, child: Tab(text: "Hábitat"))
-              ]),
-        ),
-      ),
-    );
-  }
-}
-
-class _BirdImage extends StatelessWidget {
-  const _BirdImage({
-    Key? key,
-    required this.imageUrl,
-  }) : super(key: key);
-
-  final String imageUrl;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _birdImage(imageUrl) {
     return Container(
       width: double.infinity,
       height: 250,
@@ -327,7 +310,7 @@ class _BirdImage extends StatelessWidget {
               bottomLeft: Radius.circular(25),
               bottomRight: Radius.circular(25)),
           image: DecorationImage(
-              fit: BoxFit.contain, image: NetworkImage(imageUrl)),
+              fit: BoxFit.contain, image: NetworkImage(imageUrl[0])),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),

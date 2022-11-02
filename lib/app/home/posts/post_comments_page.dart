@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 class PostCommentsPage extends StatefulWidget {
   const PostCommentsPage({super.key, required this.snap});
-  final snap;
+  final Map<String, dynamic> snap;
 
   @override
   State<PostCommentsPage> createState() => _PostCommentsPageState();
@@ -104,7 +104,7 @@ class _PostCommentsPageState extends State<PostCommentsPage> {
 }
 
 class _CommentSingle extends StatelessWidget {
-  final snapshot;
+  final dynamic snapshot;
 
   const _CommentSingle({
     Key? key,
@@ -113,6 +113,8 @@ class _CommentSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userInitials = snapshot['username'].substring(0, 2);
+
     return Container(
       padding: const EdgeInsets.only(bottom: 16),
       width: double.infinity,
@@ -120,12 +122,12 @@ class _CommentSingle extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(right: 8, top: 2),
+            Padding(
+              padding: const EdgeInsets.only(right: 8, top: 2),
               child: CircleAvatar(
-                backgroundColor: Color(0xFF396A1E),
+                backgroundColor: const Color(0xFF396A1E),
                 foregroundColor: Colors.white,
-                child: Text('JP'),
+                child: Text(userInitials),
               ),
             ),
             Expanded(

@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
             appBar: AppBar(
               centerTitle: true,
               title: const Text(
-                'Aves de San Martin',
+                'Aves Nor Amazónicas Perú',
                 style: TextStyle(fontFamily: 'BreePeru'),
               ),
             ),

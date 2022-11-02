@@ -18,7 +18,7 @@ class HomeEventCard extends StatefulWidget {
 }
 
 class _HomeEventCardState extends State<HomeEventCard> {
-  Future<void>? _launched;
+  Future<void>? launched;
 
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
@@ -47,7 +47,7 @@ class _HomeEventCardState extends State<HomeEventCard> {
               onTap: () async {
                 final uri = Uri.parse(widget.siteUrl);
                 setState(() {
-                  _launched = _launchInBrowser(uri);
+                  launched = _launchInBrowser(uri);
                 });
               },
             ),

@@ -26,7 +26,7 @@ class BirdCardsHorizontalList extends StatelessWidget {
               children: snapshot.data!.docs.map((document) {
                 return HomeBirdCard(
                   id: document['id'],
-                  imageUrl: document['imageUrl'],
+                  imageUrl: document['imageUrl'][0],
                   nombreComun: document['nombreComun'],
                   nombreCientifico: document['nombreCientifico'],
                   habitat: document['habitat'],

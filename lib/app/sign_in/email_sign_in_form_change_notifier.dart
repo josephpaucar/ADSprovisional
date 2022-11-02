@@ -21,11 +21,11 @@ class EmailSignInFormChangeNotifier extends StatefulWidget {
   }
 
   @override
-  _EmailSignInFormChangeNotifierState createState() =>
-      _EmailSignInFormChangeNotifierState();
+  EmailSignInFormChangeNotifierState createState() =>
+      EmailSignInFormChangeNotifierState();
 }
 
-class _EmailSignInFormChangeNotifierState
+class EmailSignInFormChangeNotifierState
     extends State<EmailSignInFormChangeNotifier> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -46,6 +46,7 @@ class _EmailSignInFormChangeNotifierState
   Future<void> _submit() async {
     try {
       await widget.model.submit();
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       showExceptionAlertDialog(

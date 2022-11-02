@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'rutas_bird_card.dart';
 
 class AllBirdsInAttractionPage extends StatelessWidget {
-  const AllBirdsInAttractionPage({super.key, required this.attractionId});
+  const AllBirdsInAttractionPage(
+      {super.key, required this.attractionId, required this.attractionName});
   final String attractionId;
+  final String attractionName;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Aves de San Martin',
-          style: TextStyle(fontFamily: 'BreePeru'),
+        title: Text(
+          'Aves en $attractionName',
+          style: const TextStyle(fontFamily: 'BreePeru'),
         ),
       ),
       body: Padding(
@@ -43,7 +45,7 @@ class AllBirdsInAttractionPage extends StatelessWidget {
               children: snapshot.data!.docs.map((document) {
                 return RutasBirdCard(
                   id: document['id'],
-                  imageUrl: document['imageUrl'],
+                  imageUrl: document['imageUrl'][0],
                   nombreCientifico: document['nombreCientifico'],
                   nombreComun: document['nombreComun'],
                   birdInfo: () {

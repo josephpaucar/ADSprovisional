@@ -6,9 +6,11 @@ class Post {
   final String username;
   final String uid;
   final String postId;
+  // ignore: prefer_typing_uninitialized_variables
   final datePublished;
   final String photoUrl;
   final String attractionId;
+  // ignore: prefer_typing_uninitialized_variables
   final likes;
 
   const Post({

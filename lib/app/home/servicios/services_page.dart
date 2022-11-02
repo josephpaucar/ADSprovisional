@@ -131,7 +131,7 @@ class ServicesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Aves de San Martin',
+          'Aves Nor Amazónicas Perú',
           style: TextStyle(fontFamily: 'BreePeru'),
         ),
       ),
@@ -262,6 +262,7 @@ class _CarrouselCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.tips_and_updates_rounded,
@@ -278,7 +279,7 @@ class _CarrouselCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: 4,
               ),
               Text(
                 description,

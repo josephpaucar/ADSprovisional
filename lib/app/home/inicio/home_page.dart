@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Aves de San Martin',
+          'Aves Nor Amazónicas Perú',
           style: TextStyle(fontFamily: 'BreePeru'),
         ),
       ),
@@ -79,7 +79,7 @@ class _SponsorsLogos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 50,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -88,20 +88,12 @@ class _SponsorsLogos extends StatelessWidget {
             child: Image.asset('assets/images/canatur.jpeg'),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Image.asset('assets/images/cgdam.jpeg'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Image.asset('assets/images/cgdt.jpeg'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Image.asset('assets/images/drtpe.jpeg'),
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset('assets/images/helvetas.jpeg'),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Image.asset('assets/images/helvetas.jpeg'),
+            child: Image.asset('assets/images/secompetitivo.jpeg'),
           ),
         ],
       ),
@@ -150,6 +142,7 @@ class _CarrouselCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.tips_and_updates_rounded,
@@ -166,7 +159,7 @@ class _CarrouselCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: 4,
               ),
               Text(
                 description,

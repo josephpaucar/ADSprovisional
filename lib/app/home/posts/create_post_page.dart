@@ -16,7 +16,7 @@ class CreatePostPage extends StatefulWidget {
 
 class _CreatePostPageState extends State<CreatePostPage> {
   List<String> list = <String>[
-    'Aconabick',
+    'Aconabickh',
     'Catarata de Sabaloyacu',
     'Mariposario Monarca',
     'Mono y la Gata',
@@ -42,12 +42,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
         setState(() {
           _isLoading = false;
         });
+        // ignore: use_build_context_synchronously
         showSnackBar('Posted!', context);
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       } else {
         setState(() {
           _isLoading = false;
         });
+        // ignore: use_build_context_synchronously
         showSnackBar(res, context);
       }
     } catch (e) {

@@ -20,7 +20,7 @@ class ServicesCard extends StatefulWidget {
 }
 
 class _ServicesCardState extends State<ServicesCard> {
-  Future<void>? _launched;
+  Future<void>? launched;
 
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
@@ -49,7 +49,7 @@ class _ServicesCardState extends State<ServicesCard> {
               onTap: () async {
                 final uri = Uri.parse(widget.webUrl);
                 setState(() {
-                  _launched = _launchInBrowser(uri);
+                  launched = _launchInBrowser(uri);
                 });
               },
             ),

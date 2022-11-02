@@ -68,7 +68,7 @@ class Auth implements AuthBase {
         });
 
         return user;
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException {
         throw FirebaseAuthException(
           code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
           message: 'Missing Google ID Token',

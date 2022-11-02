@@ -30,9 +30,9 @@ class _TabsPageState extends State<TabsPage> {
     return {
       TabItem.inicio: (context) => const HomePage(),
       TabItem.rutas: (context) => const RutasPage(),
-      TabItem.posts: (context) => PostsPage(),
+      TabItem.posts: (context) => const PostsPage(),
       TabItem.servicios: (context) => const ServicesPage(),
-      TabItem.cuenta: (context) => ProfilePage(),
+      TabItem.cuenta: (context) => const ProfilePage(),
     };
   }
 

@@ -66,8 +66,8 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Aves de San Martin',
-          style: TextStyle(fontFamily: 'Pacifico'),
+          'Aves Nor Amazónicas Perú',
+          style: TextStyle(fontFamily: 'BreePeru'),
         ),
         elevation: 2.0,
         centerTitle: true,
