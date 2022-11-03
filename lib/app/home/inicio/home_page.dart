@@ -49,12 +49,12 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildRecomendationsCarrousel(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance
+    return FutureBuilder(
+        future: FirebaseFirestore.instance
             .collection("recomendations")
             .where("category", isEqualTo: 'home')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            .get(),
+        builder: (BuildContext context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
               child: CircularProgressIndicator(),

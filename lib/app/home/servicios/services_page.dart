@@ -10,16 +10,25 @@ class ServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget getHotels(BuildContext context) {
-      return StreamBuilder(
-        stream: FirebaseFirestore.instance
+      return FutureBuilder(
+        future: FirebaseFirestore.instance
             .collection("servicios")
             .where("categoria", isEqualTo: 'hospedaje')
             .where("esdestacado", isEqualTo: true)
-            .snapshots(),
+            .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Text('An error ocurred.');
+          }
+          if (snapshot.data!.size < 1) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: Text(
+                'No featured hotels',
+                style: TextStyle(fontFamily: 'Poppins'),
+              ),
             );
           }
           return Container(
@@ -42,16 +51,25 @@ class ServicesPage extends StatelessWidget {
     }
 
     Widget getRestaurantes(BuildContext context) {
-      return StreamBuilder(
-        stream: FirebaseFirestore.instance
+      return FutureBuilder(
+        future: FirebaseFirestore.instance
             .collection("servicios")
             .where("categoria", isEqualTo: 'restaurante')
             .where("esdestacado", isEqualTo: true)
-            .snapshots(),
+            .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Text('An error ocurred.');
+          }
+          if (snapshot.data!.size < 1) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: Text(
+                'No featured restaurants',
+                style: TextStyle(fontFamily: 'Poppins'),
+              ),
             );
           }
           return Container(
@@ -74,16 +92,25 @@ class ServicesPage extends StatelessWidget {
     }
 
     Widget getAgenciasDeViajes(BuildContext context) {
-      return StreamBuilder(
-        stream: FirebaseFirestore.instance
+      return FutureBuilder(
+        future: FirebaseFirestore.instance
             .collection("servicios")
             .where("categoria", isEqualTo: 'agenciaDeViajes')
             .where("esdestacado", isEqualTo: true)
-            .snapshots(),
+            .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return const Text('An error ocurred.');
+          }
+          if (snapshot.data!.size < 1) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: Text(
+                'No featured agencies',
+                style: TextStyle(fontFamily: 'Poppins'),
+              ),
             );
           }
           return Container(
@@ -106,16 +133,25 @@ class ServicesPage extends StatelessWidget {
     }
 
     Widget buildRecomendationsCarrousel(BuildContext context) {
-      return StreamBuilder(
-          stream: FirebaseFirestore.instance
+      return FutureBuilder(
+          future: FirebaseFirestore.instance
               .collection("recomendations")
               .where("category", isEqualTo: 'services')
-              .snapshots(),
+              .get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return const Text('An error ocurred.');
+            }
+            if (snapshot.data!.size < 1) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Text(
+                  'No featured Recomendations',
+                  style: TextStyle(fontFamily: 'Poppins'),
+                ),
               );
             }
             return _RecomendationsCarrousel(
