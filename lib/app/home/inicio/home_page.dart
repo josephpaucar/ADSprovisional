@@ -2,6 +2,7 @@ import 'package:aves_de_san_martin/app/home/inicio/search_input_buttom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:google_translator/google_translator.dart';
 
 import 'bird_cards_horizontal_list.dart';
 import 'event_cards_horizontal_list.dart';
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Aves Nor Amazónicas Perú',
+          'North Amazonian Birds Peru',
           style: TextStyle(fontFamily: 'BreePeru'),
         ),
       ),

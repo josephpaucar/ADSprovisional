@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 Future showAlertDialog(
   BuildContext context, {
   required String title,
-  required String? dialogContent,
+  required String dialogContent,
   String? cancelActionText,
   required String defaultActionText,
 }) {

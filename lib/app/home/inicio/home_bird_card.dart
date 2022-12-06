@@ -105,13 +105,17 @@ class _CardInfo extends StatelessWidget {
                 const SizedBox(
                   height: 12,
                 ),
-                Text(
-                  dsc,
-                  textAlign: TextAlign.end,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
+                Expanded(
+                  child: Text(
+                    dsc,
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                    ),
+                    maxLines: 7,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

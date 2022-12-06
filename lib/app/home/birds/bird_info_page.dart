@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_translator/google_translator.dart';
 
 class BirdInfoPage extends StatefulWidget {
   const BirdInfoPage({super.key, required this.birdId});
@@ -48,8 +49,8 @@ class _BirdInfoPageState extends State<BirdInfoPage>
               child: AppBar(
                 toolbarHeight: 60.0,
                 centerTitle: true,
-                title:
-                    _buildHeader(data['nombreCientifico'], data['nombreComun']),
+                title: _buildHeader(
+                    data['nombreCientifico'], data['nombreIngles']),
               ),
             ),
             body: Stack(
@@ -81,7 +82,7 @@ class _BirdInfoPageState extends State<BirdInfoPage>
                                 data['cantoUrl'],
                                 isPlaying),
                             _habitatTab(data['altitud'], data['habitat'],
-                                data['status']),
+                                data['status'], data['paises']),
                           ]),
                         )
                       ],
@@ -248,51 +249,56 @@ class _BirdInfoPageState extends State<BirdInfoPage>
     );
   }
 
-  Widget _habitatTab(altitud, habitat, status) {
+  Widget _habitatTab(altitud, habitat, status, paisesArray) {
+    List<String> paisesToList = List<String>.from(paisesArray as List);
+    String paises = paisesToList.join(', ');
     return Container(
       margin: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const Text(
-          'The Peruvian Sheartail is common in a wide elevational range between nearly sea level to 2800 m on the west slope of the Andes. Bird undergo seasonal migrations. It also occurs Ec and Ch.',
-          style: TextStyle(fontFamily: 'Poppins'),
+        Text(
+          habitat,
+          style: const TextStyle(fontFamily: 'Poppins'),
         ),
         const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: <TextSpan>[
-              TextSpan(
+              const TextSpan(
                   text: 'Paises: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
-                text: 'Perú, Ecuador, Colombia',
+                text: paises,
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: <TextSpan>[
-              TextSpan(
-                  text: 'Avistado en: ',
+              const TextSpan(
+                  text: 'Status: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
-                text: 'Bosques, Humedales',
+                text: status,
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
         RichText(
-          text: const TextSpan(
-            style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
+          text: TextSpan(
+            style:
+                const TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
             children: <TextSpan>[
-              TextSpan(
+              const TextSpan(
                   text: 'Altitud: ',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: '1500 - 2000 m.s.n.m.'),
+              TextSpan(text: altitud),
             ],
           ),
         ),

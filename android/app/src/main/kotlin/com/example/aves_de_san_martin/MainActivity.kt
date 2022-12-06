@@ -1,4 +1,4 @@
-package com.example.aves_de_san_martin
+package pe.avesnoramazonicasperu.northamazonianbirdsperu
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.aves_de_san_martin">
+    package="pe.avesnoramazonicasperu.northamazonianbirdsperu">
 
     <queries>
     <!-- If your app checks for SMS support -->
@@ -16,12 +16,12 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="aves_de_san_martin"
+        android:label="North Amazonian Birds Peru"
         android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyC1vP8eRAK-Ra2l8W7ce0E98GeOFpLsLNY"/>
+               android:value="AIzaSyBcReC6v_swSZxhwPrNIs6i0Qulz5J7hUQ"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

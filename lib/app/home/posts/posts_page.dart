@@ -11,7 +11,7 @@ class PostsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Aves Nor Amazónicas Perú',
+            'North Amazonian Birds Peru',
             style: TextStyle(fontFamily: 'BreePeru'),
           ),
           actions: [

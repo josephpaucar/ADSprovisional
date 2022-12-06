@@ -14,7 +14,7 @@ class ServicesPage extends StatelessWidget {
         future: FirebaseFirestore.instance
             .collection("servicios")
             .where("categoria", isEqualTo: 'hospedaje')
-            .where("esdestacado", isEqualTo: true)
+            .where("esDestacado", isEqualTo: true)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -55,7 +55,7 @@ class ServicesPage extends StatelessWidget {
         future: FirebaseFirestore.instance
             .collection("servicios")
             .where("categoria", isEqualTo: 'restaurante')
-            .where("esdestacado", isEqualTo: true)
+            .where("esDestacado", isEqualTo: true)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -96,7 +96,7 @@ class ServicesPage extends StatelessWidget {
         future: FirebaseFirestore.instance
             .collection("servicios")
             .where("categoria", isEqualTo: 'agenciaDeViajes')
-            .where("esdestacado", isEqualTo: true)
+            .where("esDestacado", isEqualTo: true)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -167,7 +167,7 @@ class ServicesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Aves Nor Amazónicas Perú',
+          'North Amazonian Birds Peru',
           style: TextStyle(fontFamily: 'BreePeru'),
         ),
       ),

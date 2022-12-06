@@ -32,23 +32,22 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  void _showSignInError(BuildContext context, Exception exception) {
+  void _showSignInError(
+      BuildContext context, Exception exception, StackTrace stack) {
     if (exception is FirebaseException &&
         exception.code == 'ERROR_ABORTED_BY_USER') {
       return;
     }
-    showExceptionAlertDialog(
-      context,
-      title: 'Sign in failed',
-      exception: exception,
-    );
+    showExceptionAlertDialog(context,
+        title: 'Sign in failed', exception: exception, stack: stack);
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
       await manager.signInWithGoogle();
-    } on Exception catch (e) {
-      _showSignInError(context, e);
+    } on Exception catch (e, stack) {
+      print(stack.toString());
+      _showSignInError(context, e, stack);
     }
   }
 
@@ -66,7 +65,7 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Aves Nor Amazónicas Perú',
+          'North Amazonian Birds Peru',
           style: TextStyle(fontFamily: 'BreePeru'),
         ),
         elevation: 2.0,
