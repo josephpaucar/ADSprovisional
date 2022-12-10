@@ -2,7 +2,6 @@ import 'package:aves_de_san_martin/app/home/inicio/search_input_buttom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_translator/google_translator.dart';
 
 import 'bird_cards_horizontal_list.dart';
 import 'event_cards_horizontal_list.dart';
@@ -43,6 +42,13 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.only(left: 16),
             child: _SponsorsLogos(),
           ),
+          const SizedBox(height: 25),
+          const _SectionTitle(title: 'Administrado por'),
+          const SizedBox(height: 12),
+          const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: _ManagedByLogos(),
+          ),
           const SizedBox(height: 70),
         ],
       )),
@@ -72,6 +78,26 @@ class HomePage extends StatelessWidget {
   }
 }
 
+class _ManagedByLogos extends StatelessWidget {
+  const _ManagedByLogos({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 45,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Image.asset('assets/images/conave.png'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SponsorsLogos extends StatelessWidget {
   const _SponsorsLogos({
     Key? key,
@@ -80,7 +106,7 @@ class _SponsorsLogos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 40,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -95,6 +121,10 @@ class _SponsorsLogos extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Image.asset('assets/images/secompetitivo.jpeg'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset('assets/images/seco.jpeg'),
           ),
         ],
       ),
@@ -141,7 +171,7 @@ class _CarrouselCard extends StatelessWidget {
       child: Align(
         alignment: Alignment.center,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -196,7 +226,7 @@ class _SectionTitle extends StatelessWidget {
         title,
         style: const TextStyle(
           fontFamily: 'BreePeru',
-          fontSize: 20,
+          fontSize: 18,
         ),
       ),
     );

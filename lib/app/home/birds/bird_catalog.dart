@@ -32,6 +32,10 @@ class BirdCatalog extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) => ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(snapshot.data!.docs[index].data()['icon']),
+                ),
                 title: Text(
                     snapshot.data!.docs[index].data()['nombreCientifico'],
                     style: const TextStyle(fontFamily: 'Poppins')),

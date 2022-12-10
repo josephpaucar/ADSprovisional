@@ -15,7 +15,7 @@ Future showAlertDialog(
       context: context,
       builder: (content) => AlertDialog(
         title: Text(title),
-        content: Text(dialogContent!),
+        content: Text(dialogContent),
         actions: <Widget>[
           if (cancelActionText != null)
             TextButton(
@@ -34,7 +34,7 @@ Future showAlertDialog(
     context: context,
     builder: (content) => CupertinoAlertDialog(
       title: Text(title),
-      content: Text(dialogContent!),
+      content: Text(dialogContent),
       actions: <Widget>[
         if (cancelActionText != null)
           CupertinoDialogAction(

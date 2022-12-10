@@ -1,7 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_translator/google_translator.dart';
 
 class BirdInfoPage extends StatefulWidget {
   const BirdInfoPage({super.key, required this.birdId});

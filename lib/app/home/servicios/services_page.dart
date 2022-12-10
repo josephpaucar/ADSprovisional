@@ -242,7 +242,7 @@ class _TitleRow extends StatelessWidget {
           title,
           style: const TextStyle(
             fontFamily: 'BreePeru',
-            fontSize: 20,
+            fontSize: 18,
           ),
         )),
         TextButton(
@@ -296,7 +296,7 @@ class _CarrouselCard extends StatelessWidget {
       child: Align(
         alignment: Alignment.center,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

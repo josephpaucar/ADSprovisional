@@ -34,7 +34,6 @@ class AllBirdsInAttractionPage extends StatelessWidget {
               );
             }
             return GridView(
-              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
